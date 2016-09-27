@@ -1,9 +1,13 @@
 package com.iwind.libvideoview.player;
 
+import android.app.Activity;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -14,6 +18,7 @@ import android.widget.RelativeLayout;
 import com.iwind.libvideoview.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -32,6 +37,8 @@ public class SuperVideoPlayer extends RelativeLayout {
     private final int MSG_UPDATE_CONTROLLER_STATE = 2020;
     //更新进度消息
     private final int MSG_UPDATE_TIME_AND_PROGRESS = 1010;
+    //上下文
+    private Context mContext;
     //视频播放器
     private SuperVideoView mVideoView;
     //播放控制器
@@ -260,6 +267,9 @@ public class SuperVideoPlayer extends RelativeLayout {
         mVideoController.setPlayList(mVideoBeanList);
     }
 
+
+
+
     public SuperVideoPlayer(Context context) {
         super(context);
         InitView(context);
@@ -282,6 +292,7 @@ public class SuperVideoPlayer extends RelativeLayout {
      * @param context
      */
     private void InitView(Context context) {
+        this.mContext = context;
         View.inflate(context, R.layout.video_player, this);
         mVideoView = (SuperVideoView) findViewById(R.id.video_view);
         mVideoController = (VideoController) findViewById(R.id.video_controller);

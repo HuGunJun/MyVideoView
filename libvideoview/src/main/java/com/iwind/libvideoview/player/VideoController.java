@@ -1,6 +1,10 @@
 package com.iwind.libvideoview.player;
 
+import android.app.Activity;
 import android.content.Context;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.Animation;
@@ -17,6 +21,8 @@ import android.widget.TextView;
 import com.iwind.libvideoview.R;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -60,6 +66,8 @@ public class VideoController extends FrameLayout implements View.OnClickListener
     private TextView tv_title;
     //视频播放对象列表
     private List<VideoBean> mVideoBeanList;
+    //弹幕控件
+    private BarrageView mBarrageView;
 
     public VideoController(Context context) {
         super(context);
@@ -90,6 +98,7 @@ public class VideoController extends FrameLayout implements View.OnClickListener
         rl_top = (RelativeLayout) findViewById(R.id.rl_top);
         rl_right_menu = (LinearLayout) findViewById(R.id.rl_right_menu);
         mSeekBar = (SeekBar) findViewById(R.id.media_controller_progress);
+        mBarrageView = (BarrageView) findViewById(R.id.danmakuView);
         mShrinkImg = (ImageView) findViewById(R.id.shrink);
         mExpandImg = (ImageView) findViewById(R.id.expand);
         pause = (ImageView) findViewById(R.id.pause);
@@ -116,8 +125,35 @@ public class VideoController extends FrameLayout implements View.OnClickListener
         adapterVideoController = new AdapterVideoController(mContext, mVideoBeanList);
         lv_play_menu.setAdapter(adapterVideoController);
         adapterVideoController.notifyDataSetChanged();
+        ((Activity) mContext).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                List<IBarrageViewItem> list = initItems();
+                Collections.shuffle(list);
+                mBarrageView.addItem(list, true);
+            }
+        });
     }
 
+    private List<IBarrageViewItem> initItems() {
+        List<IBarrageViewItem> list = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            IBarrageViewItem item = new BarrageViewItem(mContext, i + " : plain text danmuku", mBarrageView.getWidth());
+            list.add(item);
+        }
+
+        String msg = " : text with image   ";
+        for (int i = 0; i < 100; i++) {
+            ImageSpan imageSpan = new ImageSpan(mContext, R.drawable.biz_video_play);
+            SpannableString spannableString = new SpannableString(i + msg);
+            spannableString.setSpan(imageSpan, spannableString.length() - 2, spannableString.length() - 1, Spannable
+                    .SPAN_EXCLUSIVE_EXCLUSIVE);
+            IBarrageViewItem item = new BarrageViewItem(mContext, spannableString, mBarrageView.getWidth(), 0, 0, 0,
+                    1.5f);
+            list.add(item);
+        }
+        return list;
+    }
 
     /**
      * 列表点击选择
