@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent">
+
 
     <RelativeLayout
         android:id="@+id/rl_top"
@@ -150,4 +152,17 @@
         android:layout_centerVertical="true"
         android:src="@drawable/biz_audio_sublist_item_img_icon"
         android:visibility="gone"/>
+
+    <com.iwind.libvideoview.player.BarrageView
+        android:id="@+id/danmakuView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="false"
+        app:end_Y_offset="0.8"
+        app:max_row="4"
+        android:visibility="gone"
+        app:max_running_per_row="2"
+        app:pick_interval="1000"
+        app:show_debug="false"
+        app:start_Y_offset="0.2"/>
 </RelativeLayout>
